@@ -73,14 +73,15 @@ class Wrangle:
         zillow.dropna(inplace=True)
         zillow.reset_index(inplace=True, drop=True)
 
-        # drop rows where bathrooms are 0
+        # drop rows where bathrooms are 0 and sq ft < 200
         zillow.drop(zillow[zillow["bathroom_count"] == 0].index, axis=0, inplace=True)
+        zillow.drop(zillow[zillow["calculated_finished_sq_ft"] < 200].index, axis=0, inplace=True)
 
         # remove outliers that are outside of 3 standard deviations
         zillow = zillow[(np.abs(stats.zscore(zillow)) < 3).all(axis=1)]
 
         # remove tax amount due to leakage
-        zillow.drop(columns="taxamount", axis=1, inplace=True)
+        zillow.drop(columns=["taxamount", "fips"], axis=1, inplace=True)
 
         return zillow
 
