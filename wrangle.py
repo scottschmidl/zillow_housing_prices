@@ -66,7 +66,7 @@ class Wrangle:
         zillow = Wrangle.__get_zillow_data()
 
         # rename columns for reability
-        cols_rename = {"bedroomcnt": "bedroom_count", "bathroomcnt": "bathroom_count", "calculatedfinishedsquarefeet": "calculated_finished_sq_ft", "taxvaluedollarcnt": "tax_value_dollar_count", "yearbuilt": "year_built", "taxamount": "tax_amount"}
+        cols_rename = {"bedroomcnt": "bedroom_count", "bathroomcnt": "bathroom_count", "calculatedfinishedsquarefeet": "calculated_finished_sq_ft", "taxvaluedollarcnt": "tax_value_dollar_count", "yearbuilt": "year_built"}
         zillow.rename(cols_rename, axis=1, inplace=True)
 
         # drop na's and reset index
@@ -78,6 +78,9 @@ class Wrangle:
 
         # remove outliers that are outside of 3 standard deviations
         zillow = zillow[(np.abs(stats.zscore(zillow)) < 3).all(axis=1)]
+
+        # remove tax amount due to leakage
+        zillow.drop(columns="taxamount", axis=1, inplace=True)
 
         return zillow
 
