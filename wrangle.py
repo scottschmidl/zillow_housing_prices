@@ -40,9 +40,10 @@ class Wrangle:
             # read the SQL query into a dataframe
             query = """SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt,
                                 yearbuilt, taxamount, fips
-                    FROM propertylandusetype
-                    JOIN properties_2017 USING(propertylandusetypeid)
-                    WHERE propertylandusedesc in ('Single Family Residential', 'Inferred Single Family Residential')"""
+                        FROM predictions_2017
+                        JOIN properties_2017 USING(parcelid)
+                        JOIN propertylandusetype USING(propertylandusetypeid)
+                        WHERE propertylandusetypeid = 261"""
 
             df = pd.read_sql(query, Wrangle.__get_connection(db))
             print("Connected successfully")
