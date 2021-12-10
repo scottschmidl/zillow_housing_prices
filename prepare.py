@@ -15,13 +15,13 @@ class Prepare:
         Returns:
             [type]: [description]
         """
-        X_train = train.drop("tax_value_dollar_count", axis=1)
+        X_train = train.drop(["tax_value_dollar_count", "fips", "year_built"], axis=1)
         y_train = train["tax_value_dollar_count"]
 
-        X_val = validate.drop("tax_value_dollar_count", axis=1)
+        X_val = validate.drop(["tax_value_dollar_count", "fips", "year_built"], axis=1)
         y_val = validate["tax_value_dollar_count"]
 
-        X_test = test.drop("tax_value_dollar_count", axis=1)
+        X_test = test.drop(["tax_value_dollar_count", "fips", "year_built"], axis=1)
         y_test = test["tax_value_dollar_count"]
 
         return (X_train, y_train), (X_val, y_val), (X_test, y_test)
@@ -38,7 +38,7 @@ class Prepare:
         Returns:
             np array: scaled data
         """
-        scale = QuantileTransformer(output_distribution="normal", random_state=123)
+        scale = StandardScaler()
         scale.fit(X_train)
 
         X_train_scaled = pd.DataFrame(data=scale.transform(X_train), columns=X_train.columns)

@@ -82,7 +82,7 @@ class Wrangle:
         zillow = zillow[(np.abs(stats.zscore(zillow)) < 3).all(axis=1)]
 
         # remove tax amount due to leakage
-        zillow.drop(columns=["taxamount", "fips"], axis=1, inplace=True)
+        zillow.drop(columns=["taxamount"], axis=1, inplace=True)
 
         return zillow
 
