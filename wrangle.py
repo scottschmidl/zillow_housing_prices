@@ -67,7 +67,7 @@ class Wrangle:
         zillow = Wrangle.__get_zillow_data()
 
         # rename columns for reability
-        cols_rename = {"bedroomcnt": "bedroom_count", "bathroomcnt": "bathroom_count", "calculatedfinishedsquarefeet": "calculated_finished_sq_ft", "taxvaluedollarcnt": "tax_value_dollar_count", "yearbuilt": "year_built"}
+        cols_rename = {"bedroomcnt": "bedrooms", "bathroomcnt": "bathrooms", "calculatedfinishedsquarefeet": "square_feet", "taxvaluedollarcnt": "home_tax_value", "yearbuilt": "year_built"}
         zillow.rename(cols_rename, axis=1, inplace=True)
 
         # drop na's and reset index
@@ -75,14 +75,23 @@ class Wrangle:
         zillow.reset_index(inplace=True, drop=True)
 
         # drop rows where bathrooms are 0 and sq ft < 200
-        zillow.drop(zillow[zillow["bathroom_count"] == 0].index, axis=0, inplace=True)
-        zillow.drop(zillow[zillow["calculated_finished_sq_ft"] < 200].index, axis=0, inplace=True)
+        zillow.drop(zillow[zillow["bathrooms"] == 0].index, axis=0, inplace=True)
+        zillow.drop(zillow[zillow["square_feet"] < 200].index, axis=0, inplace=True)
 
         # remove outliers that are outside of 3 standard deviations
         zillow = zillow[(np.abs(stats.zscore(zillow)) < 3).all(axis=1)]
 
         # remove tax amount due to leakage
         zillow.drop(columns=["taxamount"], axis=1, inplace=True)
+
+        # add county corresponding to fip
+
+        # 6037.0	Los Angeles, CA
+        # 6059.0	Orange, CA
+        # 6111.0	Ventura, CA
+        condlist = [6037.0, 6059.0, 6111.0]
+        choicelist = ["Los Angeles", "Orange", "Ventura"]
+        zillow["county"] = np.select(condlist, choicelist)
 
         return zillow
 
