@@ -15,13 +15,13 @@ class Prepare:
         Returns:
             [type]: [description]
         """
-        X_train = train.drop(["home_tax_value", "fips", "year_built"], axis=1)
+        X_train = train.drop(["home_tax_value", "fips", "year_built", "county"], axis=1)
         y_train = train["home_tax_value"]
 
-        X_val = validate.drop(["home_tax_value", "fips", "year_built"], axis=1)
+        X_val = validate.drop(["home_tax_value", "fips", "year_built", "county"], axis=1)
         y_val = validate["home_tax_value"]
 
-        X_test = test.drop(["home_tax_value", "fips", "year_built"], axis=1)
+        X_test = test.drop(["home_tax_value", "fips", "year_built", "county"], axis=1)
         y_test = test["home_tax_value"]
 
         return (X_train, y_train), (X_val, y_val), (X_test, y_test)

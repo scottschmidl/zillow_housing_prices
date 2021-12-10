@@ -89,7 +89,7 @@ class Wrangle:
         # 6037.0	Los Angeles, CA
         # 6059.0	Orange, CA
         # 6111.0	Ventura, CA
-        condlist = [6037.0, 6059.0, 6111.0]
+        condlist = [zillow["fips"] == 6037.0, zillow["fips"] == 6059.0, zillow["fips"] == 6111.0]
         choicelist = ["Los Angeles", "Orange", "Ventura"]
         zillow["county"] = np.select(condlist, choicelist)
 
